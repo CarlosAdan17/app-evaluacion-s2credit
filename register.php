@@ -87,6 +87,10 @@ if (isset($_POST['registerPost'])) {
 	      	</div>
 	      	
 	      	<button type="submit" class="btn-green" name="registerPost">Guardar</button>
+
+	      	<div style="margin: 20px 0 0 0;">
+      			<a href="/list.php">Regresar</a>
+      		</div>
 	    </form>
 	</main>
 

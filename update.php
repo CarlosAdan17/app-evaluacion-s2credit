@@ -66,7 +66,7 @@ if (isset($_POST['updatePost'])) {
 
 	if ($post['father_id'] == $post['id']) {
 
-		if ($post['title'] != $title && $post['body'] != $body) {
+		if ($post['title'] != $title || $post['body'] != $body) {
 			$sql = "SELECT * FROM posts where id = '$id'";
 			$result = $conn->query($sql);
 			
@@ -140,7 +140,7 @@ if (isset($_POST['updatePost'])) {
 	      	</div>
 	      	
 	      	<button type="submit" class="btn-green" name="updatePost">
-	      		
+	      	
 	      		<?php 
 
 	      			if ($post['father_id'] != $post['id']) {
@@ -152,6 +152,10 @@ if (isset($_POST['updatePost'])) {
 	      		?>
 
 	      	</button>
+
+	      	<div style="margin: 20px 0 0 0;">
+      			<a href="/list.php">Regresar</a>
+      		</div>
 	    </form>
 
 
