@@ -35,7 +35,7 @@ class PostController
 
 			$post = $result->fetch_assoc()['id'];
 
-			$sql = "UPDATE posts SET father_id = '$post', type = 1 where id = '$post'";
+			$sql = "UPDATE posts SET father_id = '$post', type = 1, main_status = 1 where id = '$post'";
 			$conn->query($sql);
 
 		}
@@ -51,7 +51,7 @@ class PostController
 	 */
 	function getListPost($conn) {
 		// Consulta para obtener todos los registros de la tabla "posts"
-	    $sql = "SELECT * FROM posts";
+	    $sql = "SELECT * FROM posts where main_status = 1";
 	    $result = $conn->query($sql);
 
 	    // Verificar si hay resultados

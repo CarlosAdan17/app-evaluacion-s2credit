@@ -26,6 +26,7 @@ CREATE TABLE IF NOT EXISTS `posts` (
   `body` text,
   `father_id` int DEFAULT NULL,
   `type` int DEFAULT NULL,
+  `main_status` int DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=101 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 

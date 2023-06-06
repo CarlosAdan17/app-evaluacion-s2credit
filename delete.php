@@ -27,7 +27,7 @@ $conn = (new DbController())->connect();
 if (isset($_GET['id'])) {
 	$id = $_GET['id'];
 
-	$sql = "DELETE FROM posts where id = '$id'";
+	$sql = "DELETE FROM posts where father_id = '$id'";
 
 	if ($conn->query($sql) == true) {
 		header("Location: list.php");

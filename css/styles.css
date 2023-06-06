@@ -196,3 +196,14 @@ tr:hover {
 	padding: 20px 0;
 	color: #3e3e3e;
 }
+
+.title-post {
+	padding: 1px 0;
+	font-weight: 700;
+}
+
+.text-history {
+	font-weight: 700;
+	padding-bottom: 10px;
+	padding-top: 5px;
+}

@@ -32,6 +32,15 @@ if (isset($_POST['registerPost'])) {
 		$sql = "INSERT INTO posts (title, body) values ('$title', '$body')";
 
 		if ($conn->query($sql) == true) {
+
+			$sql = "SELECT * FROM posts where title = '$title' and body = '$body'";
+			$result = $conn->query($sql);
+
+			$post = $result->fetch_assoc()['id'];
+
+			$sql = "UPDATE posts SET father_id = '$post', type = 1, main_status = 1 where id = '$post'";
+			$conn->query($sql);
+
 			header("Location: list.php");
 	  		exit();
 		}

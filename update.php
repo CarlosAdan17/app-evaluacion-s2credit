@@ -24,6 +24,8 @@ if (session_status() === PHP_SESSION_ACTIVE) {
 $id = null; 
 $conn = (new DbController())->connect();
 
+$listPost = [];
+
 if (isset($_GET['id'])) {
 	$id = $_GET['id'];
 
@@ -32,8 +34,26 @@ if (isset($_GET['id'])) {
 	
 	$post = $result->fetch_assoc();
 
-	if ($post != null) {
+	if ($post['father_id'] == null) {
+		$sql = "SELECT * FROM posts where father_id = '$id'";
 	} else {
+		$postId = $post['father_id'];
+		$sql = "SELECT * FROM posts where father_id = '$postId'";
+	}
+	$result = $conn->query($sql);
+
+	// Verificar si hay resultados
+    if ($result->num_rows > 0) {
+        // Array para almacenar los resultados
+        $listPost = array();
+
+        // Obtener cada fila de resultados como un arreglo asociativo
+        while ($row = $result->fetch_assoc()) {
+            $listPost[] = $row;
+        }
+    }
+
+	if ($post == null) {
 		header("Location: list.php");
   		exit();
 	}
@@ -44,11 +64,49 @@ if (isset($_POST['updatePost'])) {
 	$title = $_POST['title'];
 	$body = $_POST['body'];
 
-	$sql = "UPDATE posts SET title = '$title', body = '$body' where id = '$id'";
+	if ($post['father_id'] == $post['id']) {
 
-	if ($conn->query($sql) == true) {
-		header("Location: list.php");
-  		exit();
+		if ($post['title'] != $title && $post['body'] != $body) {
+			$sql = "SELECT * FROM posts where id = '$id'";
+			$result = $conn->query($sql);
+			
+			$postOld = $result->fetch_assoc();
+
+			$postTitle= $postOld['title'];
+			$postBody= $postOld['body'];
+			$postId = $postOld['id'];
+
+			$sql = "INSERT INTO posts (title, body, father_id) values ('$postTitle', '$postBody', '$postId')";
+
+			$conn->query($sql);
+
+			$sql = "UPDATE posts SET title = '$title', body = '$body' where id = '$id'";
+		}
+
+		if ($conn->query($sql) == true) {
+			header("Location: list.php");
+	  		exit();
+		}
+	} else {
+		$fatherId = $post['father_id'];
+		$sql = "SELECT * FROM posts where id = '$fatherId'";
+		$result = $conn->query($sql);
+		
+		$postOld = $result->fetch_assoc();
+
+		$postTitle= $post['title'];
+		$postBody= $post['body'];
+		$postId = $post['id'];
+
+		$sql = "UPDATE posts SET title = '$postTitle', body = '$postBody' where id = " . $postOld['id'];
+		$conn->query($sql);
+
+		$sql = "DELETE FROM posts where id = '$id'";
+
+		if ($conn->query($sql) == true) {
+			header("Location: list.php");
+	  		exit();
+		}
 	}
 }
 
@@ -81,8 +139,38 @@ if (isset($_POST['updatePost'])) {
 	      		<input type="text" id="body" name="body" placeholder="Contraseña" value="<?php echo $post['body'] ?>" required />
 	      	</div>
 	      	
-	      	<button type="submit" class="btn-green" name="updatePost">Guardar</button>
+	      	<button type="submit" class="btn-green" name="updatePost">
+	      		
+	      		<?php 
+
+	      			if ($post['father_id'] != $post['id']) {
+	      				echo "Retomar este registro";
+	      			} else {
+	      				echo "Actualizar";
+	      			}
+
+	      		?>
+
+	      	</button>
 	    </form>
+
+
+	   <div>
+	   		<h3 class="textHistory">Historial de cambios</h3>
+
+   			<?php foreach ($listPost as $listPostU) { ?>
+   				<div class="title-post"><p><?php echo $listPostU['title']; ?></p></div>
+   				<div class="body-post"><p><?php echo $listPostU['body']; ?></p></div>
+
+   				<?php if($listPostU['id'] != $id) { ?>
+   				<div>
+   					<a href="/update.php?id=<?php echo $listPostU['id'] ?>">Retormar registro</a>
+   				</div>
+   				<?php } ?>
+
+   				<hr>
+   			<?php } ?>
+	   </div>
 	</main>
 
 </body>
