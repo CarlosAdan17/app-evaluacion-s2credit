@@ -29,8 +29,15 @@ if (isset($_GET['id'])) {
 
 	$sql = "SELECT * FROM posts where id = '$id'";
 	$result = $conn->query($sql);
-
+	
 	$post = $result->fetch_assoc();
+
+	if ($post != null) {
+	} else {
+		header("Location: list.php");
+  		exit();
+	}
+
 }
 
 if (isset($_POST['updatePost'])) {

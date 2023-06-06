@@ -68,6 +68,11 @@ $listPost = (new PostController())->getListPost($conn);
 		<div class="register">
 			<a href="/register.php" class="btn-pretty">Registrar Post</a>
 		</div>
+
+		<div class="text">
+			Información obtenida de <strong>https://jsonplaceholder.typicode.com/posts</strong>
+		</div>
+
 		<table>
 			<thead>
 				<tr>

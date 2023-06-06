@@ -29,6 +29,15 @@ class PostController
 		    $sql = "INSERT INTO posts (title, body) VALUES ('$title', '$body')";
 
 		    $conn->query($sql);
+
+		    $sql = "SELECT * FROM posts where title = '$title' and body = '$body'";
+			$result = $conn->query($sql);
+
+			$post = $result->fetch_assoc()['id'];
+
+			$sql = "UPDATE posts SET father_id = '$post', type = 1 where id = '$post'";
+			$conn->query($sql);
+
 		}
 
 		$_SESSION['statusSave'] = "true";
